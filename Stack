@@ -1,0 +1,82 @@
+public class Stack {
+    private class Node{
+        private int data;
+        private Node next;
+        
+        private Node(int data){
+            this.data = data;
+            this.next = null;
+        }    
+    }
+    private Node head;
+    public Stack(){
+        head = null;
+    }
+    
+    public void push(int data){
+        Node pushedNode = new Node(data);
+        if(head == null){
+            head = pushedNode;
+            head.next = null;
+            return;
+        }
+        Node current = head;
+        while(current.next != null){
+            current = current.next;
+        }
+        current.next = pushedNode;
+    }
+    
+    public int pop(){
+        Node current = head, tail;
+        if(head == null){
+            System.out.println("Stack is empty, nothing to pop. Returning -1.");
+            return -1;            
+        }
+        if(head.next == null){
+            tail = head;
+            head = null;
+            return tail.data;
+        }
+        while(current.next.next != null){
+            current = current.next;
+        }
+        tail = current.next;
+        current.next = null;
+        return tail.data;
+    }
+    public int peek(){
+        if(head == null){
+            System.out.println("Stack is empty. Returning -1.");
+            return -1;
+        }
+       Node tail = head;
+       while(tail.next != null){
+           tail = tail.next;
+       }
+       return tail.data;
+    }
+    
+    public void print(){
+        Node current  = head;
+        while(current != null){
+            System.out.print(current.data + " ");
+            current = current.next;
+        }
+        System.out.println();
+    }
+    
+    public boolean isEmpty(){
+        return (head == null); 
+    }
+    
+    public boolean search(int data){
+        Node current = head;
+        while(current != null){
+            if(current.data == data)
+                return true;
+            current = current.next;
+        }
+        return false;
+    }
+}
