@@ -1,0 +1,107 @@
+public class LinkedList2 {
+    
+    class Node{
+        int data;
+        Node next;
+        public Node(int data){
+            this.data = data;
+            next = null;
+        }
+    }
+    
+    Node head;
+    public LinkedList2(){
+        head = null;
+    }
+
+    void insertFront(int data){
+        Node temp = new Node(data);
+        if(head == null){
+            head = temp;
+        }
+        else{
+            temp.next = head;
+            head = temp;
+        }
+    }
+    void insertBack(int data){
+        Node temp = new Node(data);
+        if(head == null){
+            head = temp;
+        }
+        else{
+            Node traverser = head;
+            while(traverser.next != null){
+                traverser = traverser.next;
+            }
+            traverser.next = temp;
+        }
+    }
+    int deleteFront(){
+        if(head == null){
+            System.out.println("Cannot delete, empty list.");
+            return -1;
+        }
+        else{
+            Node deleter = head;
+            head = head.next;
+            return deleter.data;
+        }
+    }
+    int deleteBack(){
+        if(head == null){
+            System.out.println("Cannot delete");
+            return -1;
+        }
+        else{
+            Node deleter;
+            if(head.next == null){
+                deleter = head;
+                head = head.next;
+                return deleter.data;
+            }
+            Node traverser = head;
+            while(traverser.next.next != null){
+                traverser = traverser.next;
+            }
+            deleter = traverser.next;
+            traverser.next = null;
+            return deleter.data;
+        }
+    }
+    boolean hasCycle(){
+        if(head == null || head.next == null){
+            return false;
+        }
+        else{
+            Node first = head, second = head.next;
+            while(first != second){
+                if(second.next == null || second.next.next == null){
+                    return false;
+                }
+                second = second.next.next;
+                first = first.next;
+            }
+            return true;
+        }
+    }
+    void reverse(){
+        Node prev = null, current = head, next;
+        while(current != null){
+            next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
+        }
+        head = prev;
+    }
+    
+    void print(){
+        Node traverser = head;
+        while(traverser != null){
+            System.out.print(traverser.data + " ");
+            traverser = traverser.next;
+        }
+        System.out.println();
+    }
+}
