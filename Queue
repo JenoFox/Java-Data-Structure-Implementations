@@ -1,0 +1,65 @@
+public class Queue {
+    private class Node{
+        private int data;
+        private Node next;
+        
+        private Node(int data){
+            this.data = data;
+            this.next = null;
+        }
+    }
+    
+    private Node head;
+    
+    public Queue(){
+        head = null;
+    }
+    public void enqueue(int data){
+        Node newNode = new Node(data);
+        newNode.next = head;
+        head = newNode;
+    } 
+    public int dequeue(){
+        if(head == null){
+            System.out.println("Nothing to dequeue. Returning -1.");
+            return -1;
+        }
+        else{
+            Node current = head, prev = null;
+            while(current.next != null){
+                prev = current;
+                current = current.next;
+            }
+            prev.next = current.next;
+            return current.data;
+        }
+    }   
+    public int front(){
+        if(head == null){
+            System.out.println("No front, queue empty. Returning -1.");
+            return -1;
+        }
+        else{
+            Node current = head;
+            while(current.next != null){
+                 current = current.next;
+            }
+            return current.data;
+        }
+    }
+    public int rear(){
+        if(head == null){
+            System.out.println("No rear, queue empty. Returning -1.");
+            return -1;
+        }
+        return head.data;
+    } 
+    public void print(){
+        Node current = head;
+        while(current != null){
+            System.out.print(current.data + " ");
+            current = current.next;
+        }
+        System.out.println();
+    }
+}
