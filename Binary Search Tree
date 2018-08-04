@@ -1,0 +1,184 @@
+public class BinarySearchTree {
+    //Node Inner Class
+    private class Node{
+        int data;
+        Node left, right;
+        
+        public Node(int data){
+            this.data = data;
+            this.left = null;
+            this.right = null;
+        }
+    }
+    //Pointer to root node
+    private Node root;
+    //Constructor
+    public BinarySearchTree(){
+        root = null;
+    }
+    // Pretty insert
+    private void insert(int data){
+        this.root = insertHelper(root, data);
+    }
+    private Node insertHelper(Node root, int data){
+        // Tree is empty, create root node
+        if(root == null){
+            root = new Node(data);
+            return root;
+        }
+        // Recurse to correct position
+        if(data < root.data){
+            root.left = insertHelper(root.left, data);
+        }
+        else if(data > root.data){
+            root.right = insertHelper(root.right, data);
+        }
+        // return pointer to root node.
+        return root;
+    }
+    // In Order print
+    private void inOrder(){
+        printInOrder(this.root);
+    }
+    private void printInOrder(Node root){
+        if(root != null){
+            printInOrder(root.left);
+            System.out.print(root.data + " ");
+            printInOrder(root.right);
+        }
+    }
+    // Pre Order print
+    private void preOrder(){
+        printPreOrder(this.root);
+    }
+    private void printPreOrder(Node root){
+        if(root != null){
+            System.out.print(root.data + " ");
+            printPreOrder(root.left);
+            printPreOrder(root.right);
+        }
+    }
+    // Post Order print
+    private void postOrder(){
+        printPostOrder(this.root);
+    }
+    private void printPostOrder(Node root){
+        if(root != null){
+            printPostOrder(root.left);
+            printPostOrder(root.right);
+            System.out.print(root.data + " ");
+        }
+    }
+    // Pretty depth first
+    private boolean depthSearch(int data){
+        if(depthSearchHelper(this.root, data) != null)
+            return true;
+        return false;
+    }
+    // Depth first search
+    private Node depthSearchHelper(Node root, int data){
+        if(root != null){
+            if(root.data == data)
+                return root;
+            else if(data < root.data)
+                return depthSearchHelper(root.left, data);
+            else if(data > root.data)
+                return depthSearchHelper(root.right, data);
+        }
+        return root;
+    }
+    private boolean breadthSearch(int data){
+        return breadthSearchHelper(this.root, data);
+    }
+    private boolean breadthSearchHelper(Node root, int data){
+        if(root != null){
+            Queue<Node> q = new LinkedList<>();
+            Node temp;
+            q.add(root);
+            while(!q.isEmpty()){
+                temp = q.remove();
+                if(temp.data == data)
+                    return true;
+                if(temp.left != null)
+                    q.add(temp.left);
+                if(temp.right != null)
+                    q.add(temp.right);
+            }
+        }
+        return false;
+    }
+    private int height(){
+        return heightHelper(this.root);
+    }
+    private int heightHelper(Node root){
+        if(root == null)
+            return -1;
+        return (heightHelper(root.left) >= heightHelper(root.right)) ? 1 + heightHelper(root.left) : 1 + heightHelper(root.right);
+    }
+    private void longestPath(){
+        longestPathHelper(this.root);
+    }
+    private void longestPathHelper(Node root){
+        if(root != null){
+            System.out.print(root.data + " ");
+            if(heightHelper(root.left) >= heightHelper(root.right))
+                longestPathHelper(root.left);
+            else if(heightHelper(root.left) < heightHelper(root.right))
+                longestPathHelper(root.right);
+        }
+    }
+    private int numberNodesInRange(int lower, int upper){
+        return nodesInRange(this.root, lower, upper);
+    }
+    private int nodesInRange(Node root, int smallest, int largest){
+        if(root == null)
+            return 0;
+        if(root.data >= smallest && root.data <= largest)
+            return 1 + nodesInRange(root.left, smallest, largest) + nodesInRange(root.right, smallest, largest);
+        return nodesInRange(root.left, smallest, largest) + nodesInRange(root.right, smallest, largest);
+    }
+    private boolean isBST(){
+        return isBSTHelper(this.root, 0, 1000);
+    }
+    private boolean isBSTHelper(Node root, int lower, int upper){
+        if(root == null)
+            return true;
+        if(root.data <= lower || root.data >= upper){
+            //System.out.println("Lower: " + lower + " Upper: " + upper + " Data: " + root.data);
+            return false;
+        }
+        else{
+            //System.out.println("Lower: " + lower + " Upper: " + upper + " Data: " + root.data);
+            return (isBSTHelper(root.left, lower, root.data - 1) && isBSTHelper(root.right, root.data + 1, upper));
+        }
+    }
+    private void delete(int data){
+        this.root = deleter(this.root, data);
+    }
+    private Node deleter(Node root, int data){
+        if(root == null)
+            return root;
+        if(data < root.data)
+            root.left = deleter(root.left, data);
+        else if(data > root.data)
+            root.right = deleter(root.right, data);
+        else{
+            if(root.left == null)
+                return root.right;
+            else if(root.right == null)
+                return root.left;
+            
+            root.data = getSuccessor(root.right);
+            root.right = deleter(root.right, root.data);        
+        }
+        return root;
+    }
+    private int getSuccessor(Node root){
+        int min = root.data;
+        while(root.left != null){
+            min = root.left.data;
+            root = root.left;
+        }
+        return min;
+    }
+}
